@@ -1,0 +1,14 @@
+# Nyayamitra Backend Dependencies
+
+# Web Framework
+Flask==2.3.3
+Flask-CORS==4.0.0
+
+# Google Gemini AI
+google-generativeai==0.3.2
+
+# Environment and Configuration
+python-dotenv==1.0.0
+
+# Utilities
+Werkzeug==2.3.7

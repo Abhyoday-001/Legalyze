@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legalyze - AI-Powered Legal Analysis</title>
+    <meta name="description" content="Transform complex legal documents into visual stories with AI-powered analysis and interactive tools.">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="nav">
+                <div class="brand">
+                    <img src="legalyze-logo.jpeg" alt="Legalyze Logo" class="brand-logo">
+                    <h1 class="brand-title">Legalyze</h1>
+                </div>
+                <div class="nav-links">
+                    <a href="#home" class="nav-link">Home</a>
+                    <a href="#features" class="nav-link">Features</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main" id="home">
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <span class="badge-icon">🤖</span>
+                        AI-Powered Legal Analysis
+                    </div>
+                    <h1 class="hero-title">
+                        Transform Complex<br>
+                        <span class="gradient-text">Legal Contracts</span><br>
+                        Into Visual Stories
+                    </h1>
+                    <p class="hero-description">
+                        Legalyze turns overwhelming legal documents into interactive 
+                        timelines, risk assessments, and multi-perspective analysis. See your 
+                        contracts from every angle.
+                    </p>
+                    <div class="hero-actions">
+                        <button class="btn-primary" onclick="scrollToSection('upload')">
+                            Start Your Legal Journey
+                            <span class="btn-arrow">→</span>
+                        </button>
+                    </div>
+                    <div class="hero-features">
+                        </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features-section" id="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Powerful Features</h2>
+                    <p class="section-subtitle">
+                        Every tool you need to understand, analyze, and optimize your legal contracts
+                    </p>
+                </div>
+                
+                <div class="features-grid">
+                    <div class="feature-card" data-feature="simplified">
+                        <div class="feature-header">
+                            <div class="feature-icon timeline-icon">📋</div>
+                            <div class="feature-status live">live</div>
+                        </div>
+                        <h3 class="feature-title">Simplified Summary</h3>
+                        <p class="feature-description">
+                            Get a clear and concise summary of your legal documents in plain English.
+                        </p>
+                    </div>
+
+                    <div class="feature-card" data-feature="red-flags">
+                        <div class="feature-header">
+                            <div class="feature-icon red-flag-icon">🚨</div>
+                            <div class="feature-status live">live</div>
+                        </div>
+                        <h3 class="feature-title">Red Flag Mode</h3>
+                        <p class="feature-description">
+                            Instant heatmap of contract risks with color-coded safety 
+                            levels for every clause.
+                        </p>
+                    </div>
+
+                    <div class="feature-card" data-feature="sandbox">
+                        <div class="feature-header">
+                            <div class="feature-icon sandbox-icon">📝</div>
+                            <div class="feature-status live">live</div>
+                        </div>
+                        <h3 class="feature-title">What-if Sandbox</h3>
+                        <p class="feature-description">
+                            Edit contracts in plain English and get AI-powered legal 
+                            rewrites instantly.
+                        </p>
+                    </div>
+
+                    <div class="feature-card" data-feature="digital-twin">
+                        <div class="feature-header">
+                            <div class="feature-icon twin-icon">👤</div>
+                            <div class="feature-status live">live</div>
+                        </div>
+                        <h3 class="feature-title">Legal Digital Twin</h3>
+                        <p class="feature-description">
+                            Your personal AI lawyer that knows your contracts inside out 
+                            and answers what-if questions.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="analysis-section" id="upload">
+            <div class="container">
+                <div class="analysis-container">
+                    <div class="upload-section">
+                        <h3 class="upload-title">Upload Your Legal Document</h3>
+                        <p class="upload-description">
+                            Support for PDF and TXT files. Your documents are processed securely and not stored.
+                        </p>
+                        
+                        <div class="upload-area" id="uploadArea">
+                            <div class="upload-content">
+                                <div class="upload-icon">📄</div>
+                                <h4>Drop your document here or click to browse</h4>
+                                <p>Supports PDF and TXT files up to 10MB</p>
+                                <input type="file" id="fileInput" accept=".pdf,.txt" hidden>
+                                <button class="btn-upload" onclick="document.getElementById('fileInput').click()">
+                                    Choose File
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="text-input-section">
+                            <label for="documentText" class="input-label">Or paste your document text:</label>
+                            <textarea 
+                                id="documentText" 
+                                class="text-input" 
+                                placeholder="Paste your legal document text here..."
+                                rows="6"
+                            ></textarea>
+                            <button class="btn-sample" onclick="loadSampleDocument()">Load Sample Contract</button>
+                        </div>
+                    </div>
+
+                    <div class="analysis-tabs">
+                        <button class="tab-btn active" data-tab="simplified" onclick="switchTab('simplified')">
+                            📋 Simplified Summary
+                        </button>
+                        <button class="tab-btn" data-tab="redflags" onclick="switchTab('redflags')">
+                            🚨 Red Flag Analysis
+                        </button>
+                        <button class="tab-btn" data-tab="qa" onclick="switchTab('qa')">
+                            💬 Legal Digital Twin
+                        </button>
+                        <button class="tab-btn" data-tab="sandbox" onclick="switchTab('sandbox')">
+                            🛠️ Sandbox Developer
+                        </button>
+                    </div>
+
+                    <button class="btn-analyze" id="analyzeBtn" onclick="analyzeDocument()">
+                        <span class="btn-text">Analyze Document</span>
+                        <div class="loading-spinner hidden" id="loadingSpinner"></div>
+                    </button>
+
+                    <div class="results-section">
+                        <div class="document-panel">
+                            <div class="panel-header">
+                                <h4>📄 Document Text</h4>
+                                <div class="document-info" id="documentInfo">
+                                    <span>No document loaded</span>
+                                </div>
+                            </div>
+                            <div class="document-content" id="documentContent">
+                                <div class="empty-state">
+                                    <div class="empty-icon">📄</div>
+                                    <p>Upload or paste a document to get started</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="analysis-panel">
+                            <div class="panel-header">
+                                <h4 id="analysisPanelTitle">📋 Simplified Analysis</h4>
+                            </div>
+                            <div class="analysis-content" id="analysisContent">
+                                <div class="empty-state">
+                                    <div class="empty-icon">🤖</div>
+                                    <p>Click "Analyze Document" to get AI-powered insights</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="qa-section hidden" id="qaSection">
+                        <div class="qa-container">
+                            <div class="qa-header">
+                                <h3>💬 Ask Questions About Your Document</h3>
+                                <p>Get instant answers about any aspect of your legal document</p>
+                            </div>
+                            <div class="chat-container" id="chatContainer">
+                                <div class="chat-messages" id="chatMessages">
+                                    <div class="welcome-message">
+                                        <div class="message-avatar">🤖</div>
+                                        <div class="message-content">
+                                            <p>Hello! I'm your AI legal assistant. Upload a document and ask me anything about it. I can explain clauses, identify risks, suggest improvements, and answer specific questions.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="chat-input-container">
+                                    <div class="chat-input-wrapper">
+                                        <input 
+                                            type="text" 
+                                            id="questionInput" 
+                                            class="chat-input" 
+                                            placeholder="Ask a question about your document..."
+                                            onkeypress="handleQuestionKeyPress(event)"
+                                        >
+                                        <button class="send-btn" onclick="askQuestion()">
+                                            <span class="send-icon">📤</span>
+                                        </button>
+                                    </div>
+                                    <div class="suggested-questions">
+                                        <button class="suggestion-btn" onclick="askSuggestedQuestion('What are the key risks in this contract?')">
+                                            What are the key risks?
+                                        </button>
+                                        <button class="suggestion-btn" onclick="askSuggestedQuestion('Can I terminate this contract early?')">
+                                            Can I terminate early?
+                                        </button>
+                                        <button class="suggestion-btn" onclick="askSuggestedQuestion('What are my financial obligations?')">
+                                            Financial obligations?
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sandbox-section hidden" id="sandboxSection">
+                        <div class="sandbox-container">
+                            <div class="sandbox-header">
+                                <h3>🛠️ Contract Sandbox Developer</h3>
+                                <p>Edit and improve your contract with AI assistance</p>
+                            </div>
+                            <div class="sandbox-content">
+                                <div class="sandbox-editor">
+                                    <div class="editor-header">
+                                        <h4>📝 Contract Editor</h4>
+                                        <div class="editor-actions">
+                                            <button class="btn-small" onclick="resetSandbox()">Reset</button>
+                                            <button class="btn-small primary" onclick="improveSandbox()">AI Improve</button>
+                                        </div>
+                                    </div>
+                                    <textarea 
+                                        id="sandboxEditor" 
+                                        class="sandbox-textarea"
+                                        placeholder="Paste your contract text here to start editing..."
+                                        rows="15"
+                                    ></textarea>
+                                </div>
+                                <div class="sandbox-suggestions">
+                                    <div class="suggestions-header">
+                                        <h4>💡 AI Suggestions</h4>
+                                    </div>
+                                    <div class="suggestions-content" id="suggestionsContent">
+                                        <div class="empty-state">
+                                            <div class="empty-icon">💡</div>
+                                            <p>Add contract text to get AI-powered improvement suggestions</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="brand">
+                        <img src="legalyze-logo.jpeg" alt="Legalyze Logo" class="brand-logo">
+                        <span class="brand-title">Legalyze</span>
+                    </div>
+                    <p>Making legal documents accessible to everyone</p>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h5>Product</h5>
+                        <a href="#features">Features</a>
+                        <a href="#pricing">Pricing</a>
+                        <a href="#api">API</a>
+                    </div>
+                    <div class="link-group">
+                        <h5>Support</h5>
+                        <a href="#help">Help Center</a>
+                        <a href="#contact">Contact</a>
+                        <a href="#privacy">Privacy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="toast" id="toast">
+        <div class="toast-content">
+            <span class="toast-icon" id="toastIcon">ℹ️</span>
+            <span class="toast-message" id="toastMessage">Notification</span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
