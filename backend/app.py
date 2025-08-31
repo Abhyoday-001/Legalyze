@@ -11,18 +11,17 @@ import json
 import logging
 from dotenv import load_dotenv
 
-# Load environment variables
+
 load_dotenv()
 
-# Initialize Flask app
+
 app = Flask(__name__)
 CORS(app)
 
-# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Configure Gemini API
+
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
@@ -31,7 +30,7 @@ else:
     logger.warning("GEMINI_API_KEY not found in environment variables")
     model = None
 
-# Serve static files
+
 @app.route('/')
 def serve_index():
     """Serve the main HTML file"""
@@ -50,7 +49,7 @@ def simplify_document():
     Returns: {'simplified_text': 'AI generated summary'}
     """
     try:
-        # Get document text from request
+        
         data = request.get_json()
         if not data or 'text' not in data:
             return jsonify({'error': 'No document text provided'}), 400
@@ -59,9 +58,9 @@ def simplify_document():
         if not document_text:
             return jsonify({'error': 'Empty document text'}), 400
         
-        # Check if Gemini API is configured
+        
         if not model:
-            # Return mock response for demo purposes
+            
             return jsonify({
                 'simplified_text': """
 **SIMPLIFIED SUMMARY**
@@ -108,7 +107,7 @@ def simplify_document():
         Format the response in clear sections with bullet points. Use simple language that anyone can understand.
         """
         
-        # Generate simplified text using Gemini
+       
         response = model.generate_content(simplify_prompt)
         simplified_text = response.text
         
@@ -127,7 +126,7 @@ def analyze_red_flags():
     Returns: [{'clause': '...', 'risk': '...', 'explanation': '...'}]
     """
     try:
-        # Get document text from request
+        
         data = request.get_json()
         if not data or 'text' not in data:
             return jsonify({'error': 'No document text provided'}), 400
@@ -136,9 +135,9 @@ def analyze_red_flags():
         if not document_text:
             return jsonify({'error': 'Empty document text'}), 400
         
-        # Check if Gemini API is configured
+       
         if not model:
-            # Return mock response for demo purposes
+            
             return jsonify([
                 {
                     "clause": "Monthly rent: ₹25,000 due on the 1st of each month",
@@ -172,7 +171,7 @@ def analyze_red_flags():
                 }
             ])
         
-        # Create prompt for red flag analysis
+        
         redflags_prompt = f"""
         You are a legal expert analyzing a contract for potential risks. Analyze this document and identify clauses with their risk levels.
 
@@ -197,22 +196,22 @@ def analyze_red_flags():
         Return ONLY the JSON array, no other text.
         """
         
-        # Generate red flag analysis using Gemini
+       
         response = model.generate_content(redflags_prompt)
         response_text = response.text.strip()
         
-        # Clean up response to ensure it's valid JSON
+       
         if response_text.startswith('```json'):
             response_text = response_text[7:]
         if response_text.endswith('```'):
             response_text = response_text[:-3]
         
-        # Parse JSON response
+        
         try:
             red_flags = json.loads(response_text)
         except json.JSONDecodeError:
             logger.error(f"Invalid JSON response: {response_text}")
-            # Fallback to mock data if JSON parsing fails
+            
             red_flags = [
                 {
                     "clause": "Unable to parse contract clauses",
@@ -236,7 +235,7 @@ def answer_question():
     Returns: {'answer': 'AI generated answer'}
     """
     try:
-        # Get request data
+       
         data = request.get_json()
         if not data or 'text' not in data or 'question' not in data:
             return jsonify({'error': 'Document text and question are required'}), 400
@@ -248,9 +247,9 @@ def answer_question():
         if not document_text or not question:
             return jsonify({'error': 'Both document text and question must be provided'}), 400
         
-        # Check if Gemini API is configured
+        
         if not model:
-            # Return mock response for demo purposes
+            
             mock_answers = {
                 'risk': 'Based on the rental agreement, the main risks include: high daily late fees (₹500/day), significant early termination penalty (₹60,000), annual rent increases of 15%, and tenant responsibility for repairs up to ₹10,000.',
                 'terminate': 'You can terminate this contract early, but there are penalties: 3 months notice is required, and if you terminate within the first 12 months, you must pay a penalty of ₹60,000. After 18 months (lock-in period), you can exit with just the 3 months notice.',
@@ -258,7 +257,7 @@ def answer_question():
                 'default': 'I can help you understand any aspect of your legal document. Please ask specific questions about clauses, terms, risks, or obligations.'
             }
             
-            # Simple keyword matching for demo
+            
             answer = mock_answers['default']
             question_lower = question.lower()
             if 'risk' in question_lower or 'danger' in question_lower:
@@ -270,14 +269,14 @@ def answer_question():
             
             return jsonify({'answer': answer})
         
-        # Build context from chat history
+        
         context = ""
         if history:
             context = "\n\nPrevious conversation:\n"
-            for item in history[-3:]:  # Last 3 exchanges for context
+            for item in history[-3:]:  
                 context += f"Q: {item['question']}\nA: {item['answer']}\n\n"
         
-        # Create prompt for Q&A
+        
         qa_prompt = f"""
         You are a helpful legal assistant. Answer the user's question about their legal document clearly and accurately.
         
@@ -298,7 +297,7 @@ def answer_question():
         Keep your answer concise but comprehensive. Use bullet points when listing multiple items.
         """
         
-        # Generate answer using Gemini
+        
         response = model.generate_content(qa_prompt)
         answer = response.text
         
@@ -317,7 +316,7 @@ def improve_contract():
     Returns: {'improved_text': 'AI improved contract'}
     """
     try:
-        # Get contract text from request
+        
         data = request.get_json()
         if not data or 'text' not in data:
             return jsonify({'error': 'No contract text provided'}), 400
@@ -326,9 +325,9 @@ def improve_contract():
         if not contract_text:
             return jsonify({'error': 'Empty contract text'}), 400
         
-        # Check if Gemini API is configured
+        
         if not model:
-            # Return mock improved contract
+            
             improved_text = contract_text.replace(
                 '₹500 per day after 5 days grace period',
                 '₹200 per day after 7 days grace period'
@@ -342,7 +341,7 @@ def improve_contract():
             
             return jsonify({'improved_text': improved_text})
         
-        # Create prompt for contract improvement
+        
         improve_prompt = f"""
         You are a legal expert helping to improve a contract. Review this contract and make it more fair and balanced for both parties.
         
@@ -359,7 +358,7 @@ def improve_contract():
         Return the complete improved contract text, maintaining the same structure but with better terms.
         """
         
-        # Generate improved contract using Gemini
+        
         response = model.generate_content(improve_prompt)
         improved_text = response.text
         
@@ -387,9 +386,9 @@ def get_suggestions():
         if not contract_text:
             return jsonify({'error': 'Empty contract text'}), 400
         
-        # Check if Gemini API is configured
+       
         if not model:
-            # Return mock suggestions
+            
             mock_suggestions = [
                 {
                     "title": "Reduce Late Payment Penalty",
@@ -415,7 +414,7 @@ def get_suggestions():
             
             return jsonify({'suggestions': mock_suggestions})
         
-        # Create prompt for suggestions
+       
         suggestions_prompt = f"""
         You are a legal expert analyzing a contract. Provide specific improvement suggestions.
         
@@ -440,22 +439,22 @@ def get_suggestions():
         Return ONLY the JSON array, no other text.
         """
         
-        # Generate suggestions using Gemini
+       
         response = model.generate_content(suggestions_prompt)
         response_text = response.text.strip()
         
-        # Clean up response to ensure it's valid JSON
+       
         if response_text.startswith('```json'):
             response_text = response_text[7:]
         if response_text.endswith('```'):
             response_text = response_text[:-3]
         
-        # Parse JSON response
+        
         try:
             suggestions = json.loads(response_text)
         except json.JSONDecodeError:
             logger.error(f"Invalid JSON response: {response_text}")
-            # Fallback to mock suggestions if JSON parsing fails
+           
             suggestions = [
                 {
                     "title": "Review Contract Terms",
@@ -480,12 +479,12 @@ def health_check():
     })
 
 if __name__ == '__main__':
-    # Create .env file if it doesn't exist
+   
     if not os.path.exists('.env'):
         with open('.env', 'w') as f:
             f.write('# Add your Google Gemini API key here\n')
             f.write('GEMINI_API_KEY=your_gemini_api_key_here\n')
         logger.info("Created .env file. Please add your GEMINI_API_KEY.")
     
-    # Run the Flask app
+    
     app.run(host='0.0.0.0', port=5000, debug=True)
