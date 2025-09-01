@@ -1,1 +1,1 @@
-# Lwgalyze
+# Legalyze
